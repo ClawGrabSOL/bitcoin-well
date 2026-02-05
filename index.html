@@ -32,21 +32,48 @@ once every 24 hours.
 
 <h2>Get Bitcoins from the Bitcoin Well</h2>
 
-<form action="/getsome" method="post">
+<form id="faucetForm" onsubmit="return handleSubmit(event)">
 <p>
 To get your free Bitcoins, enter your Bitcoin Receiving Address:
 <br/>
-<input type="text" name="addr" size="36"/>
+<input type="text" name="addr" id="addr" size="36" required/>
 </p>
 <p>
 Please prove you're human. What is <b>7 + 3</b>?
 <br/>
-<input type="text" name="captcha" size="4"/>
+<input type="text" name="captcha" id="captcha" size="4" required/>
 </p>
 <p>
 <input type="submit" value="Gimme!"/>
 </p>
+<p id="message" style="display:none; padding: 15px; background: #d4edda; border: 1px solid #28a745; color: #155724; margin-top: 15px;"></p>
 </form>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  var addr = document.getElementById('addr').value;
+  var captcha = document.getElementById('captcha').value;
+  var msg = document.getElementById('message');
+  
+  if (captcha !== '10') {
+    msg.style.background = '#f8d7da';
+    msg.style.borderColor = '#dc3545';
+    msg.style.color = '#721c24';
+    msg.textContent = 'Incorrect captcha. Please try again.';
+    msg.style.display = 'block';
+    return false;
+  }
+  
+  msg.style.background = '#d4edda';
+  msg.style.borderColor = '#28a745';
+  msg.style.color = '#155724';
+  msg.textContent = 'Successful! Bitcoin will be sent to ' + addr + '. Please allow up to 30 minutes.';
+  msg.style.display = 'block';
+  document.getElementById('faucetForm').reset();
+  return false;
+}
+</script>
 
 <hr/>
 
